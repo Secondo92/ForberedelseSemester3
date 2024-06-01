@@ -1,3 +1,6 @@
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Stack;
 
 public class BST<E> implements Tree<E> {
     protected TreeNode<E> root;
@@ -43,6 +46,40 @@ public class BST<E> implements Tree<E> {
         }
 
         return found;
+    }
+
+    public int sumOfElements(){
+        return sumOfElementsHelper(root);
+    }
+    private int sumOfElementsHelper(TreeNode<E> node){
+        if(node == null){
+            return 0;
+        }
+        return (int)node.element + sumOfElementsHelper(node.left) + sumOfElementsHelper(node.right);
+    }
+
+    public int findMax(){
+        return findMaxHelper(root);
+    }
+    private int findMaxHelper(TreeNode<E> node){
+        if(node == null){
+            return Integer.MIN_VALUE;
+        }
+        int leftMax = findMaxHelper(node.left);
+        int rightMax = findMaxHelper(node.right);
+        return Math.max((int)node.element, Math.max(leftMax, rightMax));
+    }
+
+    public int findMin(){
+        return findMinHelper(root);
+    }
+    private int findMinHelper(TreeNode<E> node){
+        if(node == null){
+            return Integer.MAX_VALUE;
+        }
+        int leftMin = findMinHelper(node.left);
+        int rightMin = findMinHelper(node.right);
+        return Math.min((int)node.element, Math.min(leftMin, rightMin));
     }
 
     @Override
@@ -97,6 +134,133 @@ public class BST<E> implements Tree<E> {
     }
 
 
+    public ArrayList<E> greaterThan(E element) {
+        ArrayList<E> greaterList = new ArrayList<>();
+        if (root == null) {
+            return greaterList;
+        }
+        Stack<TreeNode<E>> stack = new Stack<>();
+        TreeNode<E> node = root;
+        while (!stack.isEmpty() || node != null) {
+            while (node != null) {
+                stack.push(node);
+                node = node.left;
+            }
+
+            node = stack.pop();
+
+            if ((int) node.element > (int) element) {
+                greaterList.add(node.element);
+                if (node.right != null) {
+                    node = node.right;
+                } else {
+                    node = null;
+                }
+            } else {
+                node = node.right;
+            }
+        }
+        return greaterList;
+    }
+
+
+
+    public int removeMin(){
+        TreeNode<E> parent = null;
+        TreeNode<E> node = root;
+        while(node.left != null){
+            parent = node;
+            node = node.left;
+        }
+        int nodeToDelete = (int)node.element;
+        if(node.right != null) {
+            parent.left = node.right;
+        } else {
+            parent.left = null;
+        }
+        if(parent == null){
+            root = node.right;
+        }
+        return nodeToDelete;
+    }
+
+    public int removeMax(){
+        TreeNode<E> parent = null;
+        TreeNode<E> node = root;
+        while(node.right != null){
+            parent = node;
+            node = node.right;
+        }
+        int nodeToDelete = (int)node.element;
+        if(node.left != null){
+            parent.right = node.left;
+        } else {
+            parent.right = null;
+        }
+        return nodeToDelete;
+    }
+
+    public int numberOfLeaves() {
+        Stack<TreeNode<E>> stack = new Stack<>();
+        TreeNode<E> current = root;
+        int numberOfLeaves = 0;
+        if(root == null) {
+            return 0;
+        }
+        while(current != null || !stack.isEmpty()) {
+            while(current != null) {
+                // Her går vi konstant til venstre indtil hvad der er til venstre er null. Og samtidigt smider vi
+                // Det som ikke er null på stakken.
+                stack.push(current);
+                current = current.left;
+            }
+            // Noden til venstre var null, så derfor skal current være lig med det som den var for 1 iteration siden
+            // Som heldigvis ligger på stakken
+            current = stack.pop();
+
+            // Vi tjekker om højre og venstre node er null. Hvis de er, har vi fundet et blad
+            if(current.left == null && current.right == null) {
+                numberOfLeaves++;
+            }
+            // Gå til højre og tilbage i det indre while-loop som smider det på stakken og går til venstre hvis den kan
+            // Hvis ikke, så gå tilbage op i stakken
+            current = current.right;
+        }
+        return numberOfLeaves;
+    }
+
+    public int heightNodeCount(int targetHeight) {
+        if (root == null) {
+            return 0;
+        }
+
+        Stack<TreeNode<E>> stack = new Stack<>();
+        Stack<Integer> heights = new Stack<>();
+        stack.push(root);
+        heights.push(0);
+        int numberOfNodes = 0;
+
+        while (!stack.isEmpty()) {
+            TreeNode<E> node = stack.pop();
+            int height = heights.pop();
+
+            if (height == targetHeight) {
+                numberOfNodes++;
+            } else if (height < targetHeight) {
+                if (node.right != null) {
+                    stack.push(node.right);
+                    heights.push(height + 1);
+                }
+                if (node.left != null) {
+                    stack.push(node.left);
+                    heights.push(height + 1);
+                }
+            }
+        }
+
+        return numberOfNodes;
+    }
+
     @Override
     /** Postorder traversal from the root */
     public void postorder() {
@@ -105,11 +269,18 @@ public class BST<E> implements Tree<E> {
 
     public void postorderHelper(TreeNode<E> node) {
         if (node == null) {
+            System.out.println("Den var null...");
             return;
         }
+        System.out.println("Jeg står nu på " + node.element);
+        System.out.println("Går til venstre...");
         postorderHelper(node.left);
+        System.out.println("Går til højre...");
         postorderHelper(node.right);
-        System.out.print(node.element + " ");
+        System.out.println("Bearbejder knuden " + node.element);
+        if(node.left == null && node.right == null){
+            System.out.println("Oof, I found a leaf: " + node.element);
+        }
     }
 
 

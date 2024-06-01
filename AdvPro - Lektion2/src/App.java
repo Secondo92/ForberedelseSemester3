@@ -20,14 +20,41 @@ public class App {
         bst.insert(node8.element);
         bst.insert(node9.element);
 
-
+        /*
         //bst.inorder();
         //bst.preorder();
+
         bst.postorder();
+
+
         System.out.println();
         System.out.println(bst.isLeaf(node1));
         System.out.println(bst.height());
 
+         */
+
+        /*
+        System.out.println("Removing min...");
+        System.out.println(bst.removeMin());
+        System.out.println("Min removed");
+
+        System.out.println("Removing max...");
+        System.out.println(bst.removeMax());
+        System.out.println("Max removed");
+
+         */
+/*
+        System.out.println("Greater than...");
+        System.out.println(bst.greaterThan(25));
+        System.out.println("Greater than..");
+
+        System.out.println("Sum of elements: " + bst.sumOfElements());
+        System.out.println(bst.findMax());
+        System.out.println(bst.findMin());
+
+ */
+        System.out.println("Number of leaves: " + bst.numberOfLeaves());
+        System.out.println(bst.heightNodeCount(1));
 
     }
 }
