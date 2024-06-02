@@ -31,16 +31,20 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
     @Override
     /** Return true if the element is in the set */
     public boolean contains(E e) {
-        int index = hash(e.hashCode());
-        int startIndex = index;
+        if (isEmpty()) {
+            return false;
+        }
+        int probe = 0;
+        int hash = hash(e.hashCode());
 
-        while(index < table.length){
-            if(table[index].equals(e)){
+        while (probe < table.length) {
+            int index = (hash + probe) % table.length;
+            if (table[index] == null) {
+                return false;
+            } else if (table[index].equals(e)) {
                 return true;
-            }
-            index = (index + 1) % table.length;
-            if (index == startIndex) {
-                break;
+            } else {
+                probe++;
             }
         }
         return false;
@@ -65,13 +69,13 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
 
         while(probe < table.length){
             int index = (hash + probe) % table.length;
-            if(table[index] != null){
-                System.out.println("Spot is taken, probing the next index...");
-                probe++;
-            } else {
+            if(table[index] == null || table[index] == DELETED){
                 table[index] = e;
                 size++;
+                System.out.println(e + " added to index " + index);
                 return true;
+            } else {
+                probe++;
             }
         }
         return false;
@@ -84,7 +88,25 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
      * element of this set
      */
     public boolean remove(E e) {
-        // TODO
+        if(isEmpty()){
+            return false;
+        }
+        int hash = hash(e.hashCode());
+        int probe = 0;
+
+        while(probe < table.length) {
+            int index = (hash + probe) % table.length;
+            if(table[index] == null){
+                return false;
+            } else if(table[index].equals(e)) {
+                System.out.println("(Remove method) Element found and deleted");
+                table[index] = DELETED;
+                size--;
+                return true;
+            } else {
+                probe++;
+            }
+        }
         return false;
     }
 
@@ -98,6 +120,10 @@ public class MyHashSetLinearProbing<E> implements MySet<E> {
     /** Return true if the set contains no elements */
     public boolean isEmpty() {
         return size == 0;
+    }
+
+    public String toString(){
+        return "DELETED";
     }
 
 

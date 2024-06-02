@@ -119,6 +119,7 @@ public class MyHashSetChaining<E> implements MySet<E> {
                 } else {
                     prev.next = current.next;
                 }
+                size--;
                 return true;
             }
             prev = current;
