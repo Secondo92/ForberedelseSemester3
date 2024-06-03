@@ -2,6 +2,7 @@
 <project version="4">
   <component name="ProjectModuleManager">
     <modules>
+      <module fileurl="file://$PROJECT_DIR$/AdvPro - Grafer/AdvPro - Grafer.iml" filepath="$PROJECT_DIR$/AdvPro - Grafer/AdvPro - Grafer.iml" />
       <module fileurl="file://$PROJECT_DIR$/AdvPro - Hashing/AdvPro - Hashing.iml" filepath="$PROJECT_DIR$/AdvPro - Hashing/AdvPro - Hashing.iml" />
       <module fileurl="file://$PROJECT_DIR$/AdvPro - Lektion2/AdvPro - Lektion2-3-4.iml" filepath="$PROJECT_DIR$/AdvPro - Lektion2/AdvPro - Lektion2-3-4.iml" />
       <module fileurl="file://$PROJECT_DIR$/EksamensForberedelse3Semester.iml" filepath="$PROJECT_DIR$/EksamensForberedelse3Semester.iml" />
